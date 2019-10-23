@@ -2,6 +2,8 @@
 // De la libreria node_modules requiero express
 const express = require ('express')
 
+const colors = require ('colors')
+
 const app = express()
 
 var port = 8080
@@ -18,5 +20,5 @@ app.get ('/backend', (req, res) => {
     res.send('Entraste a /')
 })
 app.listen(port, () =>{
-    console.log ('Felicidades tu API esta corriendo en: http://localhost:8080')
+    console.log (colors.blue ('Felicidades tu API esta corriendo en: http://localhost:8080'))
 })

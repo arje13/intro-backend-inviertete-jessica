@@ -1,47 +1,23 @@
 'use strict'
 // De la libreria node_modules requiero express
-const express = require ('express')
 
-const colors = require ('colors')
 
-const bodyParser = require ('body-parser')
+const colors = require('colors')
 
-//Aplicacion
-const app = express()
+const keys = require('./config')
 
-//Permiso a usuario
-app.use((req,res, next)=> {
-    res.header ('Acess-Control-Allow-Origin', '*')
+const app = require('./app')
 
-    res.header ('Acess-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-auth-token')
+const mongoose = require('mongoose')
 
-    res.header ('Acess-Control-Expose-Headers', 'x-auth-token')
+var port = keys.PORT
 
-    next()
+mongoose.connect(keys.db, (err, res) => {
+    if (err) {
+        console.log(`Hubo un error conectandose a la base de datos: ${err}`)
+    }
+    app.listen(port, () => {
+        console.log(colors.bgGreen("Tu API esta corriendo en: ") + colors.bgCyan(`http://localhost:${port}`))
+    })
 })
 
-app.use (bodyParser.urlencoded({
-    extended: true
-}))
-
-var port = 8080
-
-
-//Ejecutar rutas
-app.get('/', () => {
-    console.log('Entraste a la ruta: /')
-})
-app.get ('/jessica', () => {
-    console.log('Mi nombre es Jessica')
-})
-app.post('/nombre', (req, res)=>{
-    var name = req.body.name
-
-    res.send('Hola ' + name + ' un gusto conocerte')
-})
-app.get ('/backend', (req, res) => {
-    res.send('Entraste a /')
-})
-app.listen(port, () =>{
-    console.log (colors.blue ('Felicidades tu API esta corriendo en: http://localhost:8080'))
-})
